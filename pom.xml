@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	
+	<!-- 父项目版本信息 -->
+	<groupId>com.you.wstro</groupId>
+    <artifactId>springboot-parent-manager</artifactId>
+    <!-- 父模块版本号 -->
+    <version>0.0.1-SNAPSHOT</version>
+    <name>springboot-parent-manager</name>
+    <description>rabbitmq项目开发</description>
+    <!-- 父模块打包类型必须为pom -->
+    <packaging>pom</packaging>
+    
+    <!-- 继承说明：这里继承SpringBoot提供的父工程 -->
+	<!-- <parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.1.15.RELEASE</version>
+		<relativePath/> 
+	</parent> -->
+	
+	<!-- 子模块 -->
+	<modules>
+        <module>wstro-web</module>
+        <module>wstro-base</module>
+        <module>wstro-config</module>
+        <module>wstro-dao</module>
+        <module>wstro-entity</module>
+        <module>wstro-server</module>
+	</modules>
+     
+     <properties>
+        <!-- spring boot版本 -->
+	    <spring-boot.version>2.1.15.RELEASE</spring-boot.version>
+	    <!-- 各个模块项目基础版本号 -->
+        <wstro-project.version>0.0.1-SNAPSHOT</wstro-project.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <java.version>1.8</java.version>
+        <maven-jar-plugin.version>3.1.1</maven-jar-plugin.version>
+        <fastjson.version>1.2.56</fastjson.version>
+        <druid.version>1.1.21</druid.version>
+        <commons-io.version>2.6</commons-io.version>
+	</properties>
+	
+	<!-- 通过 dependencyManagement 来管理依赖包以及版本；dependencyManagement 包裹的dependencies只有声明作用，不会实际导入-->
+    <dependencyManagement>
+        <dependencies>
+            <!-- 删除上面的parent，引入spring-boot-dependencies，进行项目依赖包管理 -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring-boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.you.wstro</groupId>
+                <artifactId>wstro-base</artifactId>
+                <version>${wstro-project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.you.wstro</groupId>
+                <artifactId>wstro-config</artifactId>
+                <version>${wstro-project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.you.wstro</groupId>
+                <artifactId>wstro-dao</artifactId>
+                <version>${wstro-project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.you.wstro</groupId>
+                <artifactId>wstro-entity</artifactId>
+                <version>${wstro-project.version}</version>
+            </dependency>
+            <!-- 阿里巴巴JSON处理器-->
+	        <dependency>
+	            <groupId>com.alibaba</groupId>
+	            <artifactId>fastjson</artifactId>
+	            <version>${fastjson.version}</version>
+	        </dependency>
+	        <!--引入自定义的数据源-->
+	        <dependency>
+	            <groupId>com.alibaba</groupId>
+	            <artifactId>druid</artifactId>
+	            <version>${druid.version}</version>
+	        </dependency>
+	        <!-- apache 工具类 -->
+	        <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>${commons-io.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+	<build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <!--默认关掉单元测试 -->
+                    <testFailureIgnore>true</testFailureIgnore>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
