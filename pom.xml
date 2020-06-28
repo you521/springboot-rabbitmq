@@ -43,6 +43,7 @@
         <fastjson.version>1.2.56</fastjson.version>
         <druid.version>1.1.21</druid.version>
         <commons-io.version>2.6</commons-io.version>
+        <mybatis.version>2.1.1</mybatis.version>
 	</properties>
 	
 	<!-- 通过 dependencyManagement 来管理依赖包以及版本；dependencyManagement 包裹的dependencies只有声明作用，不会实际导入-->
@@ -94,6 +95,12 @@
                 <artifactId>commons-io</artifactId>
                 <version>${commons-io.version}</version>
             </dependency>
+            <!-- mybatis 依赖包 -->
+			<dependency>
+			    <groupId>org.mybatis.spring.boot</groupId>
+			    <artifactId>mybatis-spring-boot-starter</artifactId>
+			    <version>${mybatis.version}</version>
+			</dependency>
         </dependencies>
     </dependencyManagement>
 

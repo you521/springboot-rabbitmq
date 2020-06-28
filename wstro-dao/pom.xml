@@ -19,7 +19,28 @@
   </properties>
   
   <dependencies>
-    
+        <!-- 内部引用 start -->
+        <dependency>
+            <groupId>com.you.wstro</groupId>
+            <artifactId>wstro-entity</artifactId>
+        </dependency>
+        <!-- druid依赖 -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid</artifactId>
+        </dependency>
+        <!-- mybatis 依赖包 -->
+        <dependency>
+            <groupId>org.mybatis.spring.boot</groupId>
+            <artifactId>mybatis-spring-boot-starter</artifactId>
+        </dependency>
+        <!-- 外部引用 end -->
+        <!-- mysql连接 -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <scope>runtime</scope>
+        </dependency>
   </dependencies>
   
   <build>
