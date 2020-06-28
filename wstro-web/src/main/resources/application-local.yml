@@ -20,3 +20,12 @@ server:
     connection-timeout: 10000
     # 请求参数长度
     max-http-form-post-size: 30MB
+    
+# mysql数据源配置
+spring:
+  datasource:
+    # JDBC连接Mysql6以上com.mysql.cj.jdbc.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/test?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8&useSSL=false
+    username: root
+    password: 123456
