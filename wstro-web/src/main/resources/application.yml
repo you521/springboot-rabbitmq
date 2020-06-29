@@ -23,8 +23,8 @@ mybatis:
   # 配置扫描包的别名，主要是实体类包
   type-aliases-package: com.you.wstro.bean
   # 加载mybatis文件
-  #config-location: classpath:mybatis/mybatis-config.xml
+  config-location: classpath:mybatis/mybatis-config.xml
   # 设置在控制台上打印sql语句
-  configuration:
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  #configuration:
+  #  log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
         
