@@ -8,7 +8,7 @@
        注意：1.无需将查询返回的所有column都进行显示声明，没有在resultMap中声明映射关系的column将进行自动映射
       2.resultMap中的column要与查询到的字段名一致，property要与实体类的属性一致
      -->
-    <resultMap type="User" id="UserResultMap">
+    <resultMap type="User" id="BaseResultMap">
         <!-- 用id属性来映射主键字段 -->
         <id column="user_id" jdbcType="INTEGER" property="id"/>
         <!-- 用result属性来映射非主键字段 -->
@@ -16,8 +16,15 @@
         <result column="user_age" jdbcType="INTEGER" property="age"/>
     </resultMap>
 
+    <!-- 利用<sql>标签抽取可重复利用的sql片段；include来引用已经抽取的sql片段 -->
+    <sql id="Base_Column_List">
+        user_id, user_name, user_age
+    </sql>
+
     <!-- 查询所有user信息 -->
-    <select id="findAll" resultMap="UserResultMap">
-        select * from user
+    <select id="findAll" resultMap="BaseResultMap">
+        select 
+        <include refid="Base_Column_List"/>
+        from user
     </select>
 </mapper>
