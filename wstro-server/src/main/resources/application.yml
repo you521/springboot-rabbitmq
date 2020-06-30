@@ -14,4 +14,3 @@ spring:
       force: true
       # 是否开启
       enabled: true
-       

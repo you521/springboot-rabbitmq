@@ -24,7 +24,13 @@
     <dependency>
        <groupId>org.springframework.boot</groupId>
        <artifactId>spring-boot-starter-mail</artifactId>
-    </dependency>    
+    </dependency>
+    <!-- 消除 Java 的冗长 ,优雅的编程 -->
+    <dependency>
+        <groupId>org.projectlombok</groupId>
+        <artifactId>lombok</artifactId>
+        <optional>true</optional>
+    </dependency>
   </dependencies>
   
   <build>

@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.you.wstro.bean.User;
 import com.you.wstro.bean.Word;
 
-//import com.you.rabbitmq.test.bean.User;
-//import com.you.rabbitmq.test.bean.Word;
 
 @RestController
 @RequestMapping(value="/api/v1")
