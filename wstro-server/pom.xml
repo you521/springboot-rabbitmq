@@ -16,6 +16,11 @@
   </parent>
   
   <dependencies>
+        <!-- 内部引用 start -->
+        <dependency>
+            <groupId>com.you.wstro</groupId>
+            <artifactId>wstro-base</artifactId>
+        </dependency>
         <dependency>
             <groupId>com.you.wstro</groupId>
             <artifactId>wstro-entity</artifactId>
@@ -25,9 +30,16 @@
             <artifactId>wstro-config</artifactId>
         </dependency>
         <dependency>
+            <groupId>com.you.wstro</groupId>
+            <artifactId>wstro-dao</artifactId>
+        </dependency>
+        <!-- 内部引用 end -->
+        
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+        <!-- 将spring boot 打成war部署时需要引入的依赖 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-tomcat</artifactId>
@@ -48,12 +60,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-aop</artifactId>
-        </dependency>
-        <!-- mysql连接 -->
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <scope>runtime</scope>
         </dependency>
         <!-- 消除 Java 的冗长 ,优雅的编程 -->
         <dependency>

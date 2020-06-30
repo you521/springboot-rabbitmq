@@ -20,7 +20,11 @@
   </properties>
   
   <dependencies>
-    
+    <!-- 邮件依赖包 -->
+    <dependency>
+       <groupId>org.springframework.boot</groupId>
+       <artifactId>spring-boot-starter-mail</artifactId>
+    </dependency>    
   </dependencies>
   
   <build>
