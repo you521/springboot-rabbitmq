@@ -4,7 +4,7 @@ spring:
     name: wstro-web
   profiles:
     # 多环境配置
-    active: local
+    active: dev
   # 设置编码格式
   http:
     encoding:

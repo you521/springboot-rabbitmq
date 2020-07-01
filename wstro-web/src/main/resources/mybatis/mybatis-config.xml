@@ -5,7 +5,7 @@
         <!--开启驼峰命名规则自动转换-->
         <setting name="mapUnderscoreToCamelCase" value="true" />
         <!-- 设置在控制台打印sql语句 -->
-        <setting name="logImpl" value="STDOUT_LOGGING" />
+        <!-- <setting name="logImpl" value="STDOUT_LOGGING" /> -->
     </settings>
     <!-- 类型别名转换 -->
     <typeAliases>
