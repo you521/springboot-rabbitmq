@@ -69,6 +69,12 @@ public class RabbitMqConfig
         cachingConnectionFactory.setConnectionCacheSize(connectionCacheSize);
         //设置缓存信道数
         cachingConnectionFactory.setChannelCacheSize(channelCacheSize);
+        
+        // 打开rabbitmq的消息确认机制(Confirm)
+        cachingConnectionFactory.setPublisherConfirms(true);
+        // 打开rabbitmq的消息确认的返回机制(Return)
+        cachingConnectionFactory.setPublisherReturns(true);
+        
         log.info("=================连接工厂设置完成，连接地址为：{}=================="+host);
         return cachingConnectionFactory;
     }
@@ -79,16 +85,41 @@ public class RabbitMqConfig
     @Bean
     public RabbitTemplate rabbitTemplate(){
         RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory());
+        /*
+         * 为了能让生产者知道消息是否进入到消息队列中 ，并且避免使用事务大幅度降低消息的发送以及消费效率，可以用confirm和return机制来代替事务
+         */
+        
+        // 实现ConfirmCallback回调函数，判断消息是否成功发送到Exchange, 注意：每一条发出的消息都会调用ConfirmCallback
+        
+        /*
+         * 方法入参：
+         * 
+         * correlationData：RabbitTemplate的send系列方法中有带这个参数的，如果传了这个参数，会在回调时拿到
+         * 
+         * ack：消息进入exchange，为true，未能进入exchange，为false，由于Connection中断发出的消息进入exchange但没有收到confirm信息的情况，也会是false
+         * 
+         * cause: 消息发送失败时的失败原因信息
+         */
+        rabbitTemplate.setConfirmCallback((correlationData, ack, cause) -> {
+            if (ack) {
+                log.info("消息成功发送到Exchange");
+                String msgId = correlationData.getId();
+                System.out.print("msgId------------------>"+msgId);
+            } else {
+                log.info("消息发送到Exchange失败, {}, cause: {}", correlationData, cause);
+            }
+        });
+
+        // 实现ReturnCallback回调函数，判断消息是否从Exchange路由到Queue, 注意: 这是一个失败回调, 只有消息从Exchange路由到Queue失败才会回调这个方法
+        rabbitTemplate.setReturnCallback((message, replyCode, replyText, exchange, routingKey) -> {
+            log.info("消息从Exchange路由到Queue失败: exchange: {}, route: {}, replyCode: {}, replyText: {}, message: {}", exchange, routingKey, replyCode, replyText, message);
+        });
         // 触发setReturnCallback回调必须设置mandatory=true, 否则Exchange没有找到Queue就会丢弃掉消息, 而不会触发回调
         rabbitTemplate.setMandatory(true);
         // 设置消息重试机制
         //rabbitTemplate.setRetryTemplate();
         // 设置MessageConverter，用于java对象与Message对象（实际发送和接收的消息对象）之间的相互转换
         //rabbitTemplate.setMessageConverter(messageConverter);
-        // 发布确认
-        //rabbitTemplate.setConfirmCallback(confirmCallBackListener);
-        // 启用发布返回
-        //rabbitTemplate.setReturnCallback(returnCallBackListener);
         log.info("===============连接模板设置完成==================");
         return rabbitTemplate;
     }
