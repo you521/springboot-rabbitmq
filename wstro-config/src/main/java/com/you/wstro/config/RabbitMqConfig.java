@@ -2,6 +2,7 @@ package com.you.wstro.config;
 
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
+import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -56,7 +57,7 @@ public class RabbitMqConfig
     
     @Bean
     public ConnectionFactory connectionFactory(){
-        log.info("==================连接工厂设置开始===================");
+        log.info("====================连接工厂设置开始，连接地址为：{}===================="+host);
         CachingConnectionFactory cachingConnectionFactory = new CachingConnectionFactory();
         cachingConnectionFactory.setHost(host);
         cachingConnectionFactory.setPort(port);
@@ -75,7 +76,7 @@ public class RabbitMqConfig
         // 打开rabbitmq的消息确认的返回机制(Return)
         cachingConnectionFactory.setPublisherReturns(true);
         
-        log.info("=================连接工厂设置完成，连接地址为：{}=================="+host);
+        log.info("====================连接工厂设置完成，连接地址为：{}===================="+host);
         return cachingConnectionFactory;
     }
     
@@ -102,9 +103,9 @@ public class RabbitMqConfig
          */
         rabbitTemplate.setConfirmCallback((correlationData, ack, cause) -> {
             if (ack) {
-                log.info("消息成功发送到Exchange");
-                String msgId = correlationData.getId();
-                System.out.print("msgId------------------>"+msgId);
+                log.info("================消息成功发送到Exchange================");
+//                String msgId = correlationData.getId();
+//                System.out.print("msgId------------------>"+msgId);
             } else {
                 log.info("消息发送到Exchange失败, {}, cause: {}", correlationData, cause);
             }
@@ -123,4 +124,22 @@ public class RabbitMqConfig
         log.info("===============连接模板设置完成==================");
         return rabbitTemplate;
     }
+    
+    /*
+     * 配置RabbitAdmin管理组件，RabbitAdmin 类可以很好的操作 rabbitMQ，在 Spring 中直接进行注入即可
+     * 
+     * 原理：RabbitAdmin 类 的底层实现就是从spring容器中获取 exchange、Bingding、routingkey以及queue的 @bean声明
+     *     然后使用 rabbitTemplate的execute方法去执行对应的声明、修改、删除等一系列 rabbitMQ基础功能操作
+     *  
+     * 作用：RabbitAdmin主要用于在Java代码中对理队和队列进行管理，用于创建、绑定、删除队列与交换机，发送消息等 
+     */
+    
+    // ConnectionFactory形参名字和connectionFactory()方法名保持一致
+    @Bean("rabbitAdmin")
+    public RabbitAdmin rabbitAdmin(ConnectionFactory connectionFactory){
+        RabbitAdmin rabbitAdmin = new RabbitAdmin(connectionFactory);
+        // 注意，autoStartup 必须设置为 true，否则 Spring 容器不会加载 RabbitAdmin 类
+        rabbitAdmin.setAutoStartup(true);
+        return  rabbitAdmin;
+     }
 }

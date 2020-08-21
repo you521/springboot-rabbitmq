@@ -20,6 +20,17 @@
   </properties>
   
   <dependencies>
+    <!-- 内部引用 start -->
+        <dependency>
+            <groupId>com.you.wstro</groupId>
+            <artifactId>wstro-entity</artifactId>
+        </dependency>
+    <!-- 外部引用 end -->
+    <!-- rabbitMQ -->
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-amqp</artifactId>
+    </dependency>
     <!-- 邮件依赖包 -->
     <dependency>
        <groupId>org.springframework.boot</groupId>

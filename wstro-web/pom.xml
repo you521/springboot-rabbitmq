@@ -33,6 +33,10 @@
             <groupId>com.you.wstro</groupId>
             <artifactId>wstro-dao</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.you.wstro</groupId>
+            <artifactId>wstro-base</artifactId>
+        </dependency>
         <!-- 外部引用 end -->
         
         <dependency>
