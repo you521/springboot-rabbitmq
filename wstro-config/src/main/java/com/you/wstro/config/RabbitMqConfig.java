@@ -57,7 +57,7 @@ public class RabbitMqConfig
     
     @Bean
     public ConnectionFactory connectionFactory(){
-        log.info("====================连接工厂设置开始，连接地址为：{}===================="+host);
+        log.info("====================连接工厂设置开始，连接地址为：{}====================",host);
         CachingConnectionFactory cachingConnectionFactory = new CachingConnectionFactory();
         cachingConnectionFactory.setHost(host);
         cachingConnectionFactory.setPort(port);
@@ -76,7 +76,7 @@ public class RabbitMqConfig
         // 打开rabbitmq的消息确认的返回机制(Return)
         cachingConnectionFactory.setPublisherReturns(true);
         
-        log.info("====================连接工厂设置完成，连接地址为：{}===================="+host);
+        log.info("====================连接工厂设置完成，连接地址为：{}====================",host);
         return cachingConnectionFactory;
     }
     
@@ -140,6 +140,8 @@ public class RabbitMqConfig
         RabbitAdmin rabbitAdmin = new RabbitAdmin(connectionFactory);
         // 注意，autoStartup 必须设置为 true，否则 Spring 容器不会加载 RabbitAdmin 类
         rabbitAdmin.setAutoStartup(true);
+        // 该选项指示RabbitAdmin记录异常，并继续声明其他元素
+        rabbitAdmin.setIgnoreDeclarationExceptions(true);
         return  rabbitAdmin;
      }
 }

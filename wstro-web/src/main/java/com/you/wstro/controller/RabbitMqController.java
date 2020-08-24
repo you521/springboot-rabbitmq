@@ -14,6 +14,12 @@ import com.alibaba.fastjson.JSONObject;
 import com.you.wstro.bean.rabbitmq.RabbitExchange;
 import com.you.wstro.service.RabbitMqService;
 
+/**
+ * rabbitmq控制器
+ * @author Administrator
+ *
+ */
+
 @RestController
 @RequestMapping(value = "/api/v1/rabbit")
 public class RabbitMqController
@@ -23,7 +29,12 @@ public class RabbitMqController
     @Resource
     private RabbitMqService rabbitMqService;
     
-    @RequestMapping(value = "/addexchange",method = RequestMethod.POST)
+    @RequestMapping(value = "/addexchange",
+                    method = RequestMethod.POST,
+                    consumes="application/json",
+                    produces="application/json",
+                    params = {"params=true"},
+                    headers = {"Host=127.0.0.1"})
     public Object addExchange(@RequestBody RabbitExchange rabbitExchange) {
         logger.info("声明rabbit交换器接口成功，请求参数为：{}",JSONObject.toJSONString(rabbitExchange));
         Exchange exchange = rabbitMqService.createExchange(rabbitExchange);
