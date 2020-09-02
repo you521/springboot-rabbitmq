@@ -59,6 +59,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
+        <!-- bean validation 依赖包 -->
+        <dependency>
+		    <groupId>org.springframework.boot</groupId>
+		    <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
         <!-- 消除 Java 的冗长 ,优雅的编程 -->
         <dependency>
             <groupId>org.projectlombok</groupId>
