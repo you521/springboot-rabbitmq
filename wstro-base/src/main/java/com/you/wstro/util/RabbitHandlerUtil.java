@@ -3,6 +3,8 @@ package com.you.wstro.util;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.CustomExchange;
 import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.core.Exchange;
@@ -13,7 +15,6 @@ import org.springframework.amqp.rabbit.core.RabbitAdmin;
 
 import com.you.wstro.bean.rabbitmq.RabbitExchange;
 
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * 
@@ -21,9 +22,10 @@ import lombok.extern.slf4j.Slf4j;
  *
  */
 
-@Slf4j
 public abstract class RabbitHandlerUtil
 {
+    private static final Logger logger = LoggerFactory.getLogger(RabbitHandlerUtil.class);
+    
     private final static String DELAYED_TYPE = "x-delayed-type";
 
     private final static String DELAYED_MESSAGE = "x-delayed-message";
@@ -92,5 +94,26 @@ public abstract class RabbitHandlerUtil
             default:
                 return null;
         }
+    }
+    
+    /**
+     * 移除交换机
+     *
+     * @param exchangeName 交换机的名称
+     * @return
+     */
+    public static boolean deleteExchange(String exchangeName) {
+        boolean flag = false;
+        try
+        {
+            // 删除交换器
+            flag = rabbitAdmin.deleteExchange(exchangeName);
+        } catch (Exception e)
+        {
+           e.printStackTrace();
+           logger.error("删除远程服务器的rabbitmq交换器失败，抛出异常信息为：{}",e);
+           return flag;
+        }
+        return flag;
     }
 }

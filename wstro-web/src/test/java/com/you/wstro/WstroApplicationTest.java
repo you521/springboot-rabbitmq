@@ -96,7 +96,7 @@ public class WstroApplicationTest
          //rabbitAdmin.deleteQueue("test.direct.queue", true, true);
          // 删除Exchange操作
          //rabbitAdmin.deleteExchange("test.direct.exchange");
-         // 接触绑定操作
+         // 解除绑定操作
          rabbitAdmin.removeBinding(BindingBuilder.
                  bind(new Queue("test.fanout.queue", true, false, false, null))
                  .to(new FanoutExchange("test.fanout.exchange", true, false, null)));

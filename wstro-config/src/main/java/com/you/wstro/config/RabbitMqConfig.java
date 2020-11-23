@@ -131,7 +131,7 @@ public class RabbitMqConfig
      * 原理：RabbitAdmin 类 的底层实现就是从spring容器中获取 exchange、Bingding、routingkey以及queue的 @bean声明
      *     然后使用 rabbitTemplate的execute方法去执行对应的声明、修改、删除等一系列 rabbitMQ基础功能操作
      *  
-     * 作用：RabbitAdmin主要用于在Java代码中对理队和队列进行管理，用于创建、绑定、删除队列与交换机，发送消息等 
+     * 作用：RabbitAdmin主要用于在Java代码中对队列进行管理，用于创建、绑定、删除队列与交换机，发送消息等 
      */
     
     // ConnectionFactory形参名字和connectionFactory()方法名保持一致
@@ -140,7 +140,9 @@ public class RabbitMqConfig
         RabbitAdmin rabbitAdmin = new RabbitAdmin(connectionFactory);
         // 注意，autoStartup 必须设置为 true，否则 Spring 容器不会加载 RabbitAdmin 类
         rabbitAdmin.setAutoStartup(true);
-        // 该选项指示RabbitAdmin记录异常，并继续声明其他元素
+        // 该选项指示RabbitAdmin记录异常，并继续声明其他元素;
+        // 当设置为true时，如果有异常抛出则不会捕获，应用程序继续执行;
+        // 当设置为false时，有异常抛出会捕获异常;
         rabbitAdmin.setIgnoreDeclarationExceptions(true);
         return  rabbitAdmin;
      }

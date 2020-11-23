@@ -36,9 +36,10 @@ public class RabbitMqController
                     params = {"params=true"},
                     headers = {"Host=127.0.0.1"})
     public Object addExchange(@RequestBody RabbitExchange rabbitExchange) {
-        logger.info("声明rabbit交换器接口成功，请求参数为：{}",JSONObject.toJSONString(rabbitExchange));
-        Exchange exchange = rabbitMqService.createExchange(rabbitExchange);
-        logger.info("创建rabbit交换器成功，返回参数为：{}",exchange);
-        return exchange;
+//        logger.info("声明rabbit交换器接口成功，请求参数为：{}",JSONObject.toJSONString(rabbitExchange));
+//        Exchange exchange = rabbitMqService.createExchange(rabbitExchange);
+//        logger.info("创建rabbit交换器成功，返回参数为：{}",exchange);
+//        return exchange;
+        return null;
     }
 }
