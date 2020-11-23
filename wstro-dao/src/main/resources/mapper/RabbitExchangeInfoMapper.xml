@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.you.wstro.mapper.RabbitExchangeInfoMapper">
+<!-- 实体类属性名和数据库表字段不一致时，通过 resultMap实现自定义映射-->
+    <!-- 
+       注意：1.无需将查询返回的所有column都进行显示声明，没有在resultMap中声明映射关系的column将进行自动映射
+      2.resultMap中的column要与查询到的字段名一致，property要与实体类的属性一致
+     -->
+  <resultMap id="BaseResultMap" type="com.you.wstro.bean.RabbitExchangeInfo">
+    <id column="exchange_id" jdbcType="INTEGER" property="exchangeId" />
+    <result column="exchange_name" jdbcType="VARCHAR" property="exchangeName" />
+    <result column="exchange_type" jdbcType="VARCHAR" property="exchangeType" />
+    <result column="exchange_delayed" jdbcType="BIT" property="exchangeDelayed" />
+    <result column="exchange_durable" jdbcType="BIT" property="exchangeDurable" />
+    <result column="exchange_auto_delete" jdbcType="BIT" property="exchangeAutoDelete" />
+    <result column="exchange_other_param" jdbcType="VARCHAR" property="exchangeOtherParam" />
+    <result column="is_binding" jdbcType="BIT" property="isBinding" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_ator" jdbcType="VARCHAR" property="createAtor" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="update_ator" jdbcType="VARCHAR" property="updateAtor" />
+  </resultMap>
+  
+  <sql id="base_columns">
+    exchange_id, exchange_name, exchange_type, exchange_delayed, exchange_durable, 
+    exchange_auto_delete, exchange_other_param, is_binding, DATE_FORMAT(create_time,'%Y-%m-%d %H:%i:%s') as create_time, create_ator
+  </sql>
+  
+  <!-- 根据主键删除数据 -->
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from rab_exchange_info
+    where exchange_id = #{exchangeId,jdbcType=INTEGER}
+  </delete>
+  
+  <!-- 数据表插入数据 -->
+  <insert id="insert" parameterType="com.you.wstro.bean.RabbitExchangeInfo">
+    <!-- 
+    resultType：表示返回主键的类型;
+    keyProperty：对应的domain对象中需要被赋值的属性，一般是主键;
+    order：如果设置为 BEFORE,那么它会首先选择主键,去设置 keyProperty,然后执行插入语句;如果设置为 AFTER,那么先执行插入语句,然后是 selectKey元素
+    
+     注意：像MySQL一类支持自动增长类型的数据库中，order需要设置为after才会取到正确的值，像Oracle这样取序列的情况，需要设置为before
+     -->
+    <selectKey keyProperty="exchangeId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into rab_exchange_info (exchange_name, exchange_type, exchange_delayed, 
+      exchange_durable, exchange_auto_delete, exchange_other_param, 
+      is_binding, create_time, create_ator)
+    values (#{exchangeName,jdbcType=VARCHAR}, #{exchangeType,jdbcType=VARCHAR}, #{exchangeDelayed,jdbcType=BIT}, 
+      #{exchangeDurable,jdbcType=BIT}, #{exchangeAutoDelete,jdbcType=BIT}, #{exchangeOtherParam,jdbcType=VARCHAR}, 
+      #{isBinding,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP}, #{createAtor,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.you.wstro.bean.RabbitExchangeInfo">
+    update rab_exchange_info
+    set exchange_name = #{exchangeName,jdbcType=VARCHAR},
+      exchange_type = #{exchangeType,jdbcType=VARCHAR},
+      exchange_delayed = #{exchangeDelayed,jdbcType=BIT},
+      exchange_durable = #{exchangeDurable,jdbcType=BIT},
+      exchange_auto_delete = #{exchangeAutoDelete,jdbcType=BIT},
+      exchange_other_param = #{exchangeOtherParam,jdbcType=VARCHAR},
+      is_binding = #{isBinding,jdbcType=BIT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_ator = #{createAtor,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      update_ator = #{updateAtor,jdbcType=VARCHAR}
+    where exchange_id = #{exchangeId,jdbcType=INTEGER}
+  </update>
+  
+  <!-- 根据id主键查询数据 -->
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select exchange_id, exchange_name, exchange_type, exchange_delayed, exchange_durable, 
+    exchange_auto_delete, exchange_other_param, is_binding, create_time, create_ator, 
+    update_time, update_ator
+    from rab_exchange_info
+    where exchange_id = #{exchangeId,jdbcType=INTEGER}
+  </select>
+  
+  <!-- 查询表的所有数据 -->
+  <select id="selectAll" resultMap="BaseResultMap">
+    select exchange_id, exchange_name, exchange_type, exchange_delayed, exchange_durable, 
+    exchange_auto_delete, exchange_other_param, is_binding, create_time, create_ator, 
+    update_time, update_ator
+    from rab_exchange_info
+  </select>
+  
+  <!-- 根据交换器的名称查询数据 -->
+  <select id="getExchangeByName" parameterType="java.lang.String" resultMap="BaseResultMap">
+   select * from rab_exchange_info where 1 = 1
+    <!-- 通过if标签添加参数判断 -->
+    <if test="exchangeName != null and exchangeName !=''">
+     and exchange_name = #{exchangeName,jdbcType=VARCHAR}
+    </if>
+  </select>
+  
+  <!-- 根据交换器类型查询交换器信息 -->
+  <select id="getExchangeByType" parameterType="java.lang.String" resultType="java.util.HashMap">
+    select 
+    <include refid="base_columns" />
+    from rab_exchange_info where 1 = 1
+    <if test="_parameter != null and _parameter !=''">
+    and exchange_type = #{_parameter,jdbcType=VARCHAR}
+    </if>
+  </select>
+  
+  <!-- 根据交换器名称查询交换器信息，返回map数据 -->
+  <select id="selectExchangeByName" parameterType="java.lang.String" resultType="java.util.HashMap">
+    select 
+    <include refid="base_columns" />
+    from rab_exchange_info where 1 = 1
+    <if test="exchangeName != null and exchangeName !=''">
+    and exchange_name = #{exchangeName,jdbcType=VARCHAR}
+    </if>
+  </select>
+  
+  <!-- 根据多条件筛选交换器信息 -->
+  <select id="getExchangeByAny" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+  
+  </select>
+</mapper>

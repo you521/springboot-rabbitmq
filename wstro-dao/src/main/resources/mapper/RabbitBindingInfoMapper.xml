@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.you.wstro.mapper.RabbitBindingInfoMapper">
+  <resultMap id="BaseResultMap" type="com.you.wstro.bean.RabbitBindingInfo">
+    <id column="binding_id" jdbcType="INTEGER" property="bindingId" />
+    <result column="queue_id" jdbcType="INTEGER" property="queueId" />
+    <result column="exchange_id" jdbcType="INTEGER" property="exchangeId" />
+    <result column="binding_key" jdbcType="VARCHAR" property="bindingKey" />
+    <result column="binding_time" jdbcType="TIMESTAMP" property="bindingTime" />
+    <result column="binding_ator" jdbcType="VARCHAR" property="bindingAtor" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from rab_binding_info
+    where binding_id = #{bindingId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.you.wstro.bean.RabbitBindingInfo">
+    <selectKey keyProperty="bindingId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into rab_binding_info (queue_id, exchange_id, binding_key, 
+      binding_time, binding_ator)
+    values (#{queueId,jdbcType=INTEGER}, #{exchangeId,jdbcType=INTEGER}, #{bindingKey,jdbcType=VARCHAR}, 
+      #{bindingTime,jdbcType=TIMESTAMP}, #{bindingAtor,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.you.wstro.bean.RabbitBindingInfo">
+    update rab_binding_info
+    set queue_id = #{queueId,jdbcType=INTEGER},
+      exchange_id = #{exchangeId,jdbcType=INTEGER},
+      binding_key = #{bindingKey,jdbcType=VARCHAR},
+      binding_time = #{bindingTime,jdbcType=TIMESTAMP},
+      binding_ator = #{bindingAtor,jdbcType=VARCHAR}
+    where binding_id = #{bindingId,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select binding_id, queue_id, exchange_id, binding_key, binding_time, binding_ator
+    from rab_binding_info
+    where binding_id = #{bindingId,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select binding_id, queue_id, exchange_id, binding_key, binding_time, binding_ator
+    from rab_binding_info
+  </select>
+</mapper>

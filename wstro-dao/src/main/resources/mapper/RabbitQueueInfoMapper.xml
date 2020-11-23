@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.you.wstro.mapper.RabbitQueueInfoMapper">
+  <resultMap id="BaseResultMap" type="com.you.wstro.bean.RabbitQueueInfo">
+    <id column="queue_id" jdbcType="INTEGER" property="queueId" />
+    <result column="queue_name" jdbcType="VARCHAR" property="queueName" />
+    <!-- MyBatis中jdbcType为bit时，对应java中的数据类型为Boolean -->
+    <result column="queue_durable" jdbcType="BIT" property="queueDurable" />
+    <result column="queue_auto_delete" jdbcType="BIT" property="queueAutoDelete" />
+    <result column="queue_other_param" jdbcType="VARCHAR" property="queueOtherParam" />
+    <result column="is_binding" jdbcType="BIT" property="isBinding" />
+    <!-- MyBatis处理日期有两种的jdbcType：jdbcType=DATE和jdbcType=TIMESTAMP -->
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_ator" jdbcType="VARCHAR" property="createAtor" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="update_ator" jdbcType="VARCHAR" property="updateAtor" />
+  </resultMap>
+  
+  <!-- 根据主键id删除数据  -->
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from rab_queue_info
+    where queue_id = #{queueId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.you.wstro.bean.RabbitQueueInfo">
+    <selectKey keyProperty="queueId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into rab_queue_info (queue_name, queue_durable, queue_auto_delete, 
+      queue_other_param, is_binding, create_time, 
+      create_ator, update_time, update_ator
+      )
+    values (#{queueName,jdbcType=VARCHAR}, #{queueDurable,jdbcType=BIT}, #{queueAutoDelete,jdbcType=BIT}, 
+      #{queueOtherParam,jdbcType=VARCHAR}, #{isBinding,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{createAtor,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{updateAtor,jdbcType=VARCHAR}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.you.wstro.bean.RabbitQueueInfo">
+    update rab_queue_info
+    set queue_name = #{queueName,jdbcType=VARCHAR},
+      queue_durable = #{queueDurable,jdbcType=BIT},
+      queue_auto_delete = #{queueAutoDelete,jdbcType=BIT},
+      queue_other_param = #{queueOtherParam,jdbcType=VARCHAR},
+      is_binding = #{isBinding,jdbcType=BIT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_ator = #{createAtor,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      update_ator = #{updateAtor,jdbcType=VARCHAR}
+    where queue_id = #{queueId,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select queue_id, queue_name, queue_durable, queue_auto_delete, queue_other_param, 
+    is_binding, create_time, create_ator, update_time, update_ator
+    from rab_queue_info
+    where queue_id = #{queueId,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select queue_id, queue_name, queue_durable, queue_auto_delete, queue_other_param, 
+    is_binding, create_time, create_ator, update_time, update_ator
+    from rab_queue_info
+  </select>
+</mapper>
