@@ -44,6 +44,10 @@
         <druid.version>1.1.21</druid.version>
         <commons-io.version>2.6</commons-io.version>
         <mybatis.version>2.1.1</mybatis.version>
+        <!-- swagger2依赖包版本号 -->
+        <swagger2.version>2.9.2</swagger2.version>
+        <!-- swagger-bootstrap-ui依赖包版本号 -->
+        <swagger2.bootstrap.version>1.9.6</swagger2.bootstrap.version>
 	</properties>
 	
 	<!-- 通过 dependencyManagement 来管理依赖包以及版本；dependencyManagement 包裹的dependencies只有声明作用，不会实际导入-->
@@ -77,6 +81,24 @@
                 <artifactId>wstro-entity</artifactId>
                 <version>${wstro-project.version}</version>
             </dependency>
+            <!-- swagger2依赖包 start -->
+	       <dependency>
+			 <groupId>io.springfox</groupId>
+			 <artifactId>springfox-swagger2</artifactId>
+			 <version>${swagger2.version}</version>
+	       </dependency>
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger-ui</artifactId>
+                <version>${swagger2.version}</version>
+            </dependency>
+		  <dependency>
+		     <groupId>com.github.xiaoymin</groupId>
+		     <artifactId>swagger-bootstrap-ui</artifactId>
+		     <version>swagger2.bootstrap.version</version>
+		  </dependency>
+            <!-- swagger2依赖包 end -->
+            
             <!-- 阿里巴巴JSON处理器-->
 	        <dependency>
 	            <groupId>com.alibaba</groupId>
