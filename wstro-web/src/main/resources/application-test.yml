@@ -1,0 +1,101 @@
+server:
+  port: 8082
+  servlet:
+    context-path: /wstro-web
+  # 设置请求头的数据大小
+  max-http-header-size: 404857
+  # tomcat配置
+  tomcat:
+    # 设置字符编码
+    uri-encoding: UTF-8
+    # 最大连接数
+    max-connections: 5000
+    # 最小线程数
+    min-spare-threads: 50
+    # 最大线程数
+    max-threads: 800
+    # 队列长度
+    accept-count: 1000
+    # 服务器连接建立超时时间
+    connection-timeout: 10000
+    # 请求参数长度
+    max-http-form-post-size: 30MB
+    
+# mysql数据源配置
+spring:
+  datasource:
+    # JDBC连接Mysql6以上com.mysql.cj.jdbc.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    #url: jdbc:mysql://localhost:3306/test?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8&useSSL=false
+    url: jdbc:mysql://localhost:3306/test?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf8&useSSL=false
+    username: root
+    password: 123456
+  # rabbitmq配置
+  rabbitmq:
+    # 服务器ip
+    host: 127.0.0.1
+    # 端口号
+    port: 5672
+    # 用户名
+    username: guest
+    # 密码
+    password: guest
+    # 配置虚拟主机
+    virtual-host: /
+    # 连接超时，单位毫秒，0表示无穷大，不超时
+    connection-timeout: 3000ms
+    # 消息确认机制 --- 是否启用发布确认(默认false），从生产者-->交换器
+    publisher-confirms: true
+    # 消息确认机制 --- 是否启用发布返回（默认false），从交换器-->队列
+    publisher-returns: true
+    # 缓存设置
+    cache:
+      channel:
+        # 缓存中保持的channel数量
+        size: 200
+        # 当缓存数量被设置时，从缓存中获取一个channel的超时时间，单位毫秒；如果为0，则总是创建一个新channel
+        checkout-timeout: 1000ms
+      connection:
+        # 缓存的连接数，只有是CONNECTION模式时生效
+        size: 10
+        # 连接工厂缓存模式：CHANNEL 和 CONNECTION
+        mode: CONNECTION
+    template:
+      # 消息确认机制 --- 启用强制信息；默认false
+      #1.当mandatory标志位设置为true时，
+      #   如果exchange根据自身类型和消息routingKey无法找到一个合适的queue存储消息，
+      #   那么broker会调用basic.return方法将消息返还给生产者;
+      #2.当mandatory设置为false时，出现上述情况broker会直接将消息丢弃;
+      #   通俗的讲，mandatory标志告诉broker代理服务器至少将消息route到一个队列中，
+      #   否则就将消息return给发送者;
+      mandatory: true
+      retry:
+        # 启用发送重试
+        enabled: true
+        # 最大重试次数
+        max-attempts: 3
+    # 消费者配置
+    listener:
+      simple:
+        # 消息确认机制 --- manual手动确认
+        acknowledge-mode: manual    # 表示消息确认方式，其有三种配置方式，分别是none、manual和auto；默认auto
+        # 最小消费者数量
+        concurrency: 5
+        # 最大消费者数量
+        max-concurrency: 20
+        # 消费者每次从队列获取的消息数量
+        prefetch: 15
+        retry:
+          # 启用监听重试
+          enabled: true
+          # 最大重试次数
+          max-attempts: 3
+# 配置日志输出级别
+logging:
+  # 指定logback配置文件的位置 
+  config: classpath:logback-spring.xml
+  # 文件日志要输出的路径
+  path: C:/logs/wstro-web
+  # 日志的输出级别
+  level:
+    root: info

@@ -14,7 +14,6 @@ spring:
       force: true
       # 是否开启
       enabled: true
-
 # mybatis配置
 mybatis:
   # 扫描映射文件

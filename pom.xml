@@ -82,21 +82,21 @@
                 <version>${wstro-project.version}</version>
             </dependency>
             <!-- swagger2依赖包 start -->
-	       <dependency>
-			 <groupId>io.springfox</groupId>
-			 <artifactId>springfox-swagger2</artifactId>
-			 <version>${swagger2.version}</version>
-	       </dependency>
+	        <dependency>
+			    <groupId>io.springfox</groupId>
+			    <artifactId>springfox-swagger2</artifactId>
+			    <version>${swagger2.version}</version>
+	        </dependency>
             <dependency>
                 <groupId>io.springfox</groupId>
                 <artifactId>springfox-swagger-ui</artifactId>
                 <version>${swagger2.version}</version>
             </dependency>
-		  <dependency>
-		     <groupId>com.github.xiaoymin</groupId>
-		     <artifactId>swagger-bootstrap-ui</artifactId>
-		     <version>swagger2.bootstrap.version</version>
-		  </dependency>
+		    <dependency>
+		        <groupId>com.github.xiaoymin</groupId>
+		        <artifactId>swagger-bootstrap-ui</artifactId>
+		        <version>${swagger2.bootstrap.version}</version>
+		    </dependency>
             <!-- swagger2依赖包 end -->
             
             <!-- 阿里巴巴JSON处理器-->

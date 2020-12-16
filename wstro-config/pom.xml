@@ -32,6 +32,20 @@
         <groupId>com.alibaba</groupId>
         <artifactId>fastjson</artifactId>
     </dependency>
+    <!-- 引入swagger2依赖 -->
+    <dependency>
+        <groupId>io.springfox</groupId>
+        <artifactId>springfox-swagger2</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>io.springfox</groupId>
+        <artifactId>springfox-swagger-ui</artifactId>
+    </dependency>
+    <!-- bootstrap-ui依赖包 -->
+    <dependency>
+         <groupId>com.github.xiaoymin</groupId>
+         <artifactId>swagger-bootstrap-ui</artifactId>
+    </dependency>
     <!-- 消除 Java 的冗长 ,优雅的编程 -->
     <dependency>
         <groupId>org.projectlombok</groupId>
