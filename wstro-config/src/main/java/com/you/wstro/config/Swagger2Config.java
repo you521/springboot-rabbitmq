@@ -17,7 +17,6 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @Configuration       // 声明该类为配置类
 @EnableSwagger2      // 声明开启swagger2
-@Profile({"dev","test"})  // 设置只在开发环境和生产环境使用swagger文档，生产环境不允许使用
 @PropertySource(value ={ "classpath:/config/swagger.properties" }) // 加载文件的路径
 public class Swagger2Config
 {
@@ -28,6 +27,7 @@ public class Swagger2Config
      * @return
      */
     @Bean
+    @Profile({"dev","test"})  // 设置只在开发环境和生产环境使用swagger文档，生产环境不允许使用
     @ConditionalOnExpression("${swagger.enable}")  // 是否开启访问接口文档的权限，只有当括号中返回为true时，使用该注解的类才会被实例化，spring容器才会创建bean
     public Docket createRestApi() {
         System.out.println("DocketBean实例化成功----------------------》");
