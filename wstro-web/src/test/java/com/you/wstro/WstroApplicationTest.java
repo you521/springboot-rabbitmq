@@ -1,5 +1,10 @@
 package com.you.wstro;
 
+import java.sql.Connection;
+import java.sql.SQLException;
+
+import javax.sql.DataSource;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -21,14 +26,31 @@ public class WstroApplicationTest
 {
      private static final Logger logger = LoggerFactory.getLogger(WstroApplicationTest.class);
      
-     @Test
-     public void contextLoads() {
-     }
      
      @Autowired
      private RabbitAdmin rabbitAdmin;
      
-    
+     @Autowired
+     private DataSource dataSource;
+     
+     @Test
+     public void contextLoads() throws SQLException {
+         Connection connection = null;
+         try {
+             // 获取连接
+             connection = dataSource.getConnection();
+             // 打印 数据源
+             System.out.println("【dataSourceClass======>】" + dataSource.getClass());
+             // 打印 连接对象
+             System.out.println("【connectionClass======>】" + connection.getClass());
+         } catch (SQLException throwables) {
+             throwables.printStackTrace();
+         } finally {
+             // 断言，连接不可以为空，才关闭连接
+             assert connection != null;
+             connection.close();
+         }
+     }
      
      @Test
      public void testAdmin() {
@@ -97,8 +119,8 @@ public class WstroApplicationTest
          // 删除Exchange操作
          //rabbitAdmin.deleteExchange("test.direct.exchange");
          // 解除绑定操作
-         rabbitAdmin.removeBinding(BindingBuilder.
-                 bind(new Queue("test.fanout.queue", true, false, false, null))
-                 .to(new FanoutExchange("test.fanout.exchange", true, false, null)));
+//         rabbitAdmin.removeBinding(BindingBuilder.
+//                 bind(new Queue("test.fanout.queue", true, false, false, null))
+//                 .to(new FanoutExchange("test.fanout.exchange", true, false, null)));
      }
 }
