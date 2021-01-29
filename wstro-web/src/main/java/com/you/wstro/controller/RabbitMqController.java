@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.you.wstro.bean.rabbitmq.RabbitExchange;
+import com.you.wstro.common.RabbitMqSendUtil;
 import com.you.wstro.service.RabbitMqService;
 
 /**
@@ -24,6 +25,9 @@ public class RabbitMqController {
 
     @Resource
     private RabbitMqService rabbitMqService;
+    
+    @Resource
+    private RabbitMqSendUtil rabbitMqSendUtil;
 
     @RequestMapping(value = "/addexchange", method = RequestMethod.POST, consumes = "application/json",
         produces = "application/json", params = {"params=true"}, headers = {"Host=127.0.0.1"})
@@ -33,5 +37,11 @@ public class RabbitMqController {
         // logger.info("创建rabbit交换器成功，返回参数为：{}",exchange);
         // return exchange;
         return null;
+    }
+    
+    @RequestMapping(value="/sendmsg",method = RequestMethod.POST)
+    public String sendMsg() {
+        rabbitMqSendUtil.sendDirectMessage();
+        return "ok";
     }
 }

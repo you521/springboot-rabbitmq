@@ -1,12 +1,15 @@
 package com.you.wstro.config;
 
+
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import com.you.wstro.config.bean.BaseRabbitMqBean;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -14,34 +17,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class RabbitMqConfig
 {
-    // rabbitmq服务器地址
-    @Value("${spring.rabbitmq.host}")
-    private String host;
- 
-    // rabbitmq服务器端口号
-    @Value("${spring.rabbitmq.port}")
-    private int port;
-    
-    // rabbitmq登录名称
-    @Value("${spring.rabbitmq.username}")
-    private String userName;
- 
-    // rabbitmq登录密码
-    @Value("${spring.rabbitmq.password}")
-    private String password;
- 
-    // rabbitmq虚拟主机
-    @Value("${spring.rabbitmq.virtual-host}")
-    private String virtualHost;
-    
-    // 连接设置数
-    @Value("${spring.rabbitmq.cache.connection.size}")
-    private int connectionCacheSize;
-    
-    // 缓存设置数
-    @Value("${spring.rabbitmq.cache.channel.size}")
-    private int channelCacheSize;
-    
+    @Autowired
+    private BaseRabbitMqBean baseRabbitMqBean;
     
     /**
      * spring AMQP默认使用CachingConnectionFactory创建一个应用程序共享的连接工厂，也是用途最广泛的ConnectionFactory构建方法
@@ -57,26 +34,32 @@ public class RabbitMqConfig
     
     @Bean
     public ConnectionFactory connectionFactory(){
-        log.info("====================连接工厂设置开始，连接地址为：{}====================",host);
+        log.info("====================连接工厂设置开始，连接地址为：{}====================",baseRabbitMqBean.getHost());
         CachingConnectionFactory cachingConnectionFactory = new CachingConnectionFactory();
-        cachingConnectionFactory.setHost(host);
-        cachingConnectionFactory.setPort(port);
-        cachingConnectionFactory.setUsername(userName);
-        cachingConnectionFactory.setPassword(password);
-        cachingConnectionFactory.setVirtualHost(virtualHost);
-        //设置连接工厂缓存模式：CONNECTION
+        // rabbitmq服务器地址
+        cachingConnectionFactory.setHost(baseRabbitMqBean.getHost());
+        // 端口号
+        cachingConnectionFactory.setPort(baseRabbitMqBean.getPort());
+        // 用户名
+        cachingConnectionFactory.setUsername(baseRabbitMqBean.getUserName());
+        // 密码
+        cachingConnectionFactory.setPassword(baseRabbitMqBean.getPassWord());
+        // 配置虚拟主机
+        cachingConnectionFactory.setVirtualHost(baseRabbitMqBean.getVirtualHost());
+        // 设置连接超时时间
+        cachingConnectionFactory.setConnectionTimeout(baseRabbitMqBean.getConnectionTimeout());
+        //设置连接工厂缓存模式：CONNECTION；这里工厂缓存模式有两种：CONNECTION和CHANNEL
         cachingConnectionFactory.setCacheMode(CachingConnectionFactory.CacheMode.CONNECTION);
-        //设置缓存连接数
-        cachingConnectionFactory.setConnectionCacheSize(connectionCacheSize);
+        //设置缓存连接数，注意：仅在CONNECTION模式使用，设置Connection的缓存数量
+        cachingConnectionFactory.setConnectionCacheSize(baseRabbitMqBean.getCache().getConnection().getSize());
         //设置缓存信道数
-        cachingConnectionFactory.setChannelCacheSize(channelCacheSize);
-        
+        cachingConnectionFactory.setChannelCacheSize(baseRabbitMqBean.getCache().getChannel().getSize());
         // 打开rabbitmq的消息确认机制(Confirm)
-        cachingConnectionFactory.setPublisherConfirms(true);
+        cachingConnectionFactory.setPublisherConfirms(baseRabbitMqBean.isPublisherConfirms());
         // 打开rabbitmq的消息确认的返回机制(Return)
-        cachingConnectionFactory.setPublisherReturns(true);
+        cachingConnectionFactory.setPublisherReturns(baseRabbitMqBean.isPublisherReturns());
         
-        log.info("====================连接工厂设置完成，连接地址为：{}====================",host);
+        log.info("====================连接工厂设置完成，连接地址为：{}====================",baseRabbitMqBean.getHost());
         return cachingConnectionFactory;
     }
     
@@ -90,9 +73,9 @@ public class RabbitMqConfig
          * 为了能让生产者知道消息是否进入到消息队列中 ，并且避免使用事务大幅度降低消息的发送以及消费效率，可以用confirm和return机制来代替事务
          */
         
-        // 实现ConfirmCallback回调函数，判断消息是否成功发送到Exchange, 注意：每一条发出的消息都会调用ConfirmCallback
-        
         /*
+         * 实现ConfirmCallback回调函数，判断消息是否成功发送到Exchange, 注意：每一条发出的消息都会调用ConfirmCallback
+         * 
          * 方法入参：
          * 
          * correlationData：RabbitTemplate的send系列方法中有带这个参数的，如果传了这个参数，会在回调时拿到
@@ -104,8 +87,6 @@ public class RabbitMqConfig
         rabbitTemplate.setConfirmCallback((correlationData, ack, cause) -> {
             if (ack) {
                 log.info("================消息成功发送到Exchange================");
-//                String msgId = correlationData.getId();
-//                System.out.print("msgId------------------>"+msgId);
             } else {
                 log.info("消息发送到Exchange失败, {}, cause: {}", correlationData, cause);
             }
@@ -121,7 +102,7 @@ public class RabbitMqConfig
         //rabbitTemplate.setRetryTemplate();
         // 设置MessageConverter，用于java对象与Message对象（实际发送和接收的消息对象）之间的相互转换
         //rabbitTemplate.setMessageConverter(messageConverter);
-        log.info("===============连接模板设置完成==================");
+        log.info("=======================RabbitTemplate连接模板设置完成=========================");
         return rabbitTemplate;
     }
     
@@ -143,7 +124,8 @@ public class RabbitMqConfig
         // 该选项指示RabbitAdmin记录异常，并继续声明其他元素;
         // 当设置为true时，如果有异常抛出则不会捕获，应用程序继续执行;
         // 当设置为false时，有异常抛出会捕获异常;
-        rabbitAdmin.setIgnoreDeclarationExceptions(true);
+        rabbitAdmin.setIgnoreDeclarationExceptions(false);
         return  rabbitAdmin;
      }
+   
 }

@@ -119,7 +119,7 @@ spring:
     # 配置虚拟主机
     virtual-host: /
     # 连接超时，单位毫秒，0表示无穷大，不超时
-    connection-timeout: 3000ms
+    connection-timeout: 3000
     # 消息确认机制 --- 是否启用发布确认(默认false），从生产者-->交换器
     publisher-confirms: true
     # 消息确认机制 --- 是否启用发布返回（默认false），从交换器-->队列
@@ -130,10 +130,10 @@ spring:
         # 缓存中保持的channel数量
         size: 200
         # 当缓存数量被设置时，从缓存中获取一个channel的超时时间，单位毫秒；如果为0，则总是创建一个新channel
-        checkout-timeout: 1000ms
+        checkout-timeout: 1000
       connection:
         # 缓存的连接数，只有是CONNECTION模式时生效
-        size: 10
+        size: 5
         # 连接工厂缓存模式：CHANNEL 和 CONNECTION
         mode: CONNECTION
     template:
