@@ -5,6 +5,7 @@ import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -69,6 +70,7 @@ public class RabbitMqConfig
     @Bean
     public RabbitTemplate rabbitTemplate(){
         RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory());
+        rabbitTemplate.setMessageConverter(producerJackson2MessageConverter());
         /*
          * 为了能让生产者知道消息是否进入到消息队列中 ，并且避免使用事务大幅度降低消息的发送以及消费效率，可以用confirm和return机制来代替事务
          */
@@ -128,4 +130,8 @@ public class RabbitMqConfig
         return  rabbitAdmin;
      }
    
+    @Bean
+    public Jackson2JsonMessageConverter producerJackson2MessageConverter() {
+        return new Jackson2JsonMessageConverter();
+    }
 }
