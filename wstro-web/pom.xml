@@ -15,9 +15,9 @@
     <version>0.0.1-SNAPSHOT</version>
   </parent>
   <properties>
-        <!-- 指定该Main Class为全局的唯一入口 -->
-        <start-class>com.you.wstro.WstroApplication</start-class>
-    </properties>
+    <!-- 指定该Main Class为全局的唯一入口 -->
+    <start-class>com.you.wstro.WstroApplication</start-class>
+  </properties>
 
     <dependencies>
         <!-- 内部引用 start -->

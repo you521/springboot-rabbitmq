@@ -45,6 +45,12 @@
             <artifactId>spring-boot-starter-tomcat</artifactId>
             <scope>provided</scope>
         </dependency>
+        <!-- 引入spring-boot-configuration-processor -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
         <!-- spring test -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -88,7 +94,7 @@
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
         </dependency>
-    </dependencies>
+  </dependencies>
   <build>
         <!-- 设置打包后的文件名称 -->
         <finalName>${project.name}</finalName>

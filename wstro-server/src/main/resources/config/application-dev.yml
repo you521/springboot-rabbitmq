@@ -29,6 +29,53 @@ spring:
     url: jdbc:mysql://localhost:3306/test?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8&useSSL=false
     username: root
     password: 123456
+  # rabbitmq消费者配置
+  rabbitmq:
+    # 服务器ip
+    host: 127.0.0.1
+    # 端口号
+    port: 5672
+    # 用户名
+    username: guest
+    # 密码
+    password: guest
+    # 配置虚拟主机
+    virtual-host: /
+    # 连接超时，单位毫秒，0表示无穷大，不超时
+    connection-timeout: 3000
+    # 缓存设置
+    cache: 
+      channel:
+        # 缓存中保持的channel数量
+        size: 200
+        # 当缓存数量被设置时，从缓存中获取一个channel的超时时间，单位毫秒；如果为0，则总是创建一个新channel
+        checkout-timeout: 1000
+      connection:
+        # 缓存的连接数，只有是CONNECTION模式时生效
+        size: 5
+        # 连接工厂缓存模式：CHANNEL 和 CONNECTION
+        mode: CONNECTION
+    # 消费者配置
+    listener:
+      # 监听器类型
+      type: simple
+      simple:
+        # 消息确认机制 --- manual手动确认
+        acknowledge-mode: manual    # 表示消息确认方式，其有三种配置方式，分别是none、manual和auto；默认auto
+        # 最小消费者数量
+        concurrency: 5
+        # 最大消费者数量
+        max-concurrency: 20
+        # 消费者每次从队列获取的消息数量
+        prefetch: 15
+        #配置重试机制
+        retry:
+          # 启用监听重试
+          enabled: false
+          # 最大重试次数
+          max-attempts: 3
+          # 重试时间间隔，单位：毫秒
+          initial-interval: 3000
   # 发送邮件的相关配置
   mail:
     # 配置发送邮件服务器的地址
