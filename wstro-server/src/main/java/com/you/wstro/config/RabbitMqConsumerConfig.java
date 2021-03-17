@@ -52,7 +52,7 @@ public class RabbitMqConsumerConfig
        */
       @Bean
       public ConnectionFactory connectionFactory(){
-          logger.info("====================连接工厂设置开始，连接地址为：{}====================",baseRabbitMqProperty.getHost());
+          logger.info("====================消费者连接工厂设置开始，连接地址为：{}====================",baseRabbitMqProperty.getHost());
           CachingConnectionFactory cachingConnectionFactory = new CachingConnectionFactory();
           // rabbitmq服务器地址
           cachingConnectionFactory.setHost(baseRabbitMqProperty.getHost());
@@ -72,7 +72,7 @@ public class RabbitMqConsumerConfig
           cachingConnectionFactory.setConnectionCacheSize(baseRabbitMqProperty.getCache().getConnection().getSize());
           //设置缓存信道数
           cachingConnectionFactory.setChannelCacheSize(baseRabbitMqProperty.getCache().getChannel().getSize());
-          logger.info("====================连接工厂设置完成，连接地址为：{}====================",baseRabbitMqProperty.getHost());
+          logger.info("====================消费者连接工厂设置完成，连接地址为：{}====================",baseRabbitMqProperty.getHost());
           return cachingConnectionFactory;
       }
       
@@ -84,8 +84,11 @@ public class RabbitMqConsumerConfig
       @Bean
       public RabbitListenerContainerFactory<?> listenerContainerFactory() {
           SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
+          // 设置工厂连接
           factory.setConnectionFactory(connectionFactory());
-          // 消费端接受数据json序列化
+          // 默认采用下面的这种转换器
+          // container.setMessageConverter(new SimpleMessageConverter());
+          // 消费端接受数据json反序列化
           factory.setMessageConverter(consumerJackson2MessageConverter());
           // 设置消费端手动确认机制；   none：不确认  auto：自动确认  manual：手动确认
           factory.setAcknowledgeMode(AcknowledgeMode.MANUAL);
@@ -96,14 +99,17 @@ public class RabbitMqConsumerConfig
           // 一个请求最大处理的消息数量
           factory.setPrefetchCount(prefetch);
           // 是否设置Channel的事务
-          //factory.setChannelTransacted( false );
+          //factory.setChannelTransacted(false);
           // setTxSize：设置事务当中可以处理的消息数量
           //factory.setTxSize( 1 );
           // 设置当rabbitmq收到nack/reject确认信息时的处理方式，设为true，扔回queue头部，设为false，丢弃
-          //factory.setDefaultRequeueRejected( true );
+          //factory.setDefaultRequeueRejected(true);
           return factory;
       }
       
+      /**
+       * 消费端数据序列化-json
+       */
       @Bean
       public Jackson2JsonMessageConverter consumerJackson2MessageConverter() {
           return new Jackson2JsonMessageConverter();

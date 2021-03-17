@@ -3,6 +3,7 @@ package com.you.wstro.bean.model;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -16,8 +17,10 @@ import java.time.format.DateTimeFormatter;
  */
 
 @Data
-public class ResponseModel {
+public class ResponseModel implements Serializable{
     
+    private static final long serialVersionUID = 1L;
+
     private static final String timeStamp;
     
     // 静态代码块初始化响应时间

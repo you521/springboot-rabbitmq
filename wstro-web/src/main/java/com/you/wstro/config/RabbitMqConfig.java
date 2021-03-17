@@ -35,7 +35,7 @@ public class RabbitMqConfig
     
     @Bean
     public ConnectionFactory connectionFactory(){
-        log.info("====================连接工厂设置开始，连接地址为：{}====================",baseRabbitMqBean.getHost());
+        log.info("====================生产者连接工厂设置开始，连接地址为：{}====================",baseRabbitMqBean.getHost());
         CachingConnectionFactory cachingConnectionFactory = new CachingConnectionFactory();
         // rabbitmq服务器地址
         cachingConnectionFactory.setHost(baseRabbitMqBean.getHost());
@@ -60,7 +60,7 @@ public class RabbitMqConfig
         // 打开rabbitmq的消息确认的返回机制(Return)
         cachingConnectionFactory.setPublisherReturns(baseRabbitMqBean.isPublisherReturns());
         
-        log.info("====================连接工厂设置完成，连接地址为：{}====================",baseRabbitMqBean.getHost());
+        log.info("====================生产者连接工厂设置完成，连接地址为：{}====================",baseRabbitMqBean.getHost());
         return cachingConnectionFactory;
     }
     
@@ -70,7 +70,7 @@ public class RabbitMqConfig
     @Bean
     public RabbitTemplate rabbitTemplate(){
         RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory());
-        rabbitTemplate.setMessageConverter(producerJackson2MessageConverter());
+        //rabbitTemplate.setMessageConverter(producerJackson2MessageConverter());
         /*
          * 为了能让生产者知道消息是否进入到消息队列中 ，并且避免使用事务大幅度降低消息的发送以及消费效率，可以用confirm和return机制来代替事务
          */
@@ -102,8 +102,6 @@ public class RabbitMqConfig
         rabbitTemplate.setMandatory(true);
         // 设置消息重试机制
         //rabbitTemplate.setRetryTemplate();
-        // 设置MessageConverter，用于java对象与Message对象（实际发送和接收的消息对象）之间的相互转换
-        //rabbitTemplate.setMessageConverter(messageConverter);
         log.info("=======================RabbitTemplate连接模板设置完成=========================");
         return rabbitTemplate;
     }

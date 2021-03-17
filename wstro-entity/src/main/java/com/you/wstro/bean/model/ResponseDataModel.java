@@ -1,5 +1,7 @@
 package com.you.wstro.bean.model;
 
+import java.io.Serializable;
+
 import lombok.Data;
 
 /**
@@ -12,8 +14,10 @@ import lombok.Data;
  */
 
 @Data
-public class ResponseDataModel extends ResponseModel {
+public class ResponseDataModel extends ResponseModel implements Serializable{
     
+    private static final long serialVersionUID = 5249945833736489533L;
+
     /*
      * 无参构造函数（显式）
      */

@@ -5,8 +5,10 @@ import javax.annotation.Resource;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.you.wstro.bean.User;
 import com.you.wstro.bean.rabbitmq.RabbitExchange;
 import com.you.wstro.common.RabbitMqSendUtil;
 import com.you.wstro.service.RabbitMqService;
@@ -39,9 +41,20 @@ public class RabbitMqController {
         return null;
     }
     
-    @RequestMapping(value="/sendmsg",method = RequestMethod.POST)
-    public String sendMsg() {
-        rabbitMqSendUtil.sendDirectMessage();
+    @RequestMapping(value="/sendmsg",method = RequestMethod.GET)
+    public String sendMsg(@RequestParam(value = "str")String str) {
+        System.out.println("str----------------->"+str);
+        if (str.equals("1"))
+        {
+            rabbitMqSendUtil.sendDirectMessage();
+        }else {
+            User user = new User();
+            user.setAge(25);
+            user.setId(1);
+            user.setName("哈哈哈");
+            rabbitMqSendUtil.sendDirectMessage(user);
+
+        }
         return "ok";
     }
 }
